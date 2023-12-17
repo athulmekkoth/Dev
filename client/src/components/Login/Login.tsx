@@ -1,13 +1,13 @@
 // src/components/LoginPage.tsx
 import React, { useState } from 'react';
-
+import { MouseEvent } from 'react';
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    
+  const handleLogin = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     console.log(`Logging in with email: ${email} and password: ${password}`);
+
   };
 
   return (
