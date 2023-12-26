@@ -1,0 +1,100 @@
+// Wildcard route handler for all other pages
+app.get('/', async(req: Request, res: Response) => {
+const users=await prisma.user.findMany();
+res.json(users);
+});
+app.post('/', async (req: Request, res: Response) => {
+  console.log(req.body);
+  const { email, username, password } = req.body;
+
+  try {
+    const newUsers = await prisma.user.create({
+      data: { id: uuidv4(), email, username, password },
+    });
+    res.json(newUsers);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+  
+  app.put('/:id', async(req: Request, res: Response) => {
+  const {id}=req.params;
+    const newemail=req.body.email;
+    const users=await prisma.user.update({where:{id:parseInt(id)},data:{email:newemail}});
+    res.json(users);
+    });
+    app.post('/house', async (req: Request, res: Response) => {
+      console.log(req.body);
+     ;
+    
+      try {
+        const newUsers = await prisma.house.create({data:req.body})
+        
+        res.json(newUsers);
+      } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    })
+
+    app.get('/house', async(req: Request, res: Response) => {
+   
+        const all=await prisma.house.findMany({
+          include:{
+            owner:true,
+            buildby:true,
+          } 
+          
+        });
+        res.json(all);
+        });
+        app.post('/house', async (req: Request, res: Response) => {
+          console.log(req.body);
+         ;
+        
+          try {
+            const newUsers = await prisma.house.create({data:req.body})
+            
+            res.json(newUsers);
+          } catch (error) {
+            console.error('Error creating user:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
+        })
+        //we can also post many as a jsomn 
+
+        app.get('/filter', async(req: Request, res: Response) => {
+       
+              try {
+                
+                const find=await prisma.house.findMany({
+                  where:{
+                    wifipassword:{
+                      not:null,
+                    },
+                    owner:{
+                      email:{
+                        gte:22,
+                      }
+                    }
+                  },
+                  orderBy:[
+                    {
+                      owner:{
+                        username:"desc"
+                      }
+                    }
+                  ],
+                  include:{
+                    owner:true,
+                    buildby:true,
+                  }
+                })
+                
+                res.json(newUsers);
+              } catch (error) {
+                console.error('Error creating user:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+              }
+            })

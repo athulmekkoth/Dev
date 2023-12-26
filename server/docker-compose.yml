@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6379:6379
+
+  redis_insight:
+    image: redislabs/redisinsight:latest
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_insight_volume_data:/db
+
+  api:
+    build: . # build from Dockerfile
+    ports:
+      - 4000:3000
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:N4KLGkhGDKU0i4vC@db.yztrdeivgpjpnhvxtqwl.supabase.co:5432/postgres
+      - ACCESS_TOKEN_SECRET=c50267b906a652f
+      - REFRESH_TOKEN_SECRET=R7pxEv0tLFVOtWoh
+    depends_on:
+      - redis
+
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:

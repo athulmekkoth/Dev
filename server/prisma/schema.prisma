@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  iadmin    Boolean  @default(false)
+  password  String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+ refreshToken RefreshToken?
+
+
+  HouseOwned House[] @relation("HouseOwner")
+
+  HouseBuild House[] @relation("Housebuilder")
+}
+model RefreshToken {
+  id         String   @id @default(uuid())
+  userId     String @unique
+  token      String   @unique
+   expiresAt  DateTime @default(dbgenerated("NOW() + interval '7 days'"))
+  createdAt  DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+}
+
+model House {
+  id           String   @id @default(uuid())
+  address      String   @unique
+  wifipassword String?
+  owner        User     @relation("HouseOwner", fields: [ownerid], references: [id])
+  ownerid      String
+  buildby      User     @relation("Housebuilder", fields: [buildbyid], references: [id])
+  buildbyid    String
+  createdAt    DateTime @default(now())
+  updateAt     DateTime @updatedAt
+}
+// npx prisma migrate dev --name init --create-only
+//npx prisma migrate deploy 
