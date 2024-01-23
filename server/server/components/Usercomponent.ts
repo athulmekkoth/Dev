@@ -26,55 +26,65 @@ const UserRegister = async (req: Request, res: Response) => {
 
 
 }
-  catch (error) {
-    res.status(500).json({ message: "error.message" });
+  catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
 
 const UserLogin = async (req: Request, res: Response) => {
-  try{
-    const user=await prisma.user.findUnique({where:{email:req.body.email}});
-    if(!user){
-      return res.status(400).json({message:"user does not exist"})
-    }
-    const password=await bcrypt.compare(req.body.password,user.password);
-    if(!password){
-      return res.status(400).json({message:"incorrect password"})
-    }
-    const refreshtoken=await prisma.refreshToken.findUnique({where:{userId:user.id}});
-    const accessToken=createAccessToken(user.id);
-    
-  if(!refreshtoken){
-    const refreshtoken=createRefreshToken(user.id);
-    const token=await prisma.refreshToken.create({
-     data:{
-       userId:user.id,
-       token:refreshtoken
-     }
-    })
-  }
- sendrefreshToken(res,refreshtoken?.token)
-   
-    return res.status(200).json({message:"user logged in successfully",accessToken:accessToken})
-    
+  try {
+    const user = await prisma.user.findUnique({ where: { email: req.body.email } });
 
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    const password = await bcrypt.compare(req.body.password, user.password);
+
+    if (!password) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
+
+    const refreshToken = await prisma.refreshToken.findUnique({ where: { userId: user.id } });
+    const accessToken = createAccessToken(user.id);
+
+    if (!refreshToken) {
+      const newRefreshToken = createRefreshToken(user.id);
+
+      await prisma.refreshToken.create({
+        data: {
+          userId: user.id,
+          token: newRefreshToken,
+        },
+      });
+
+      sendrefreshToken(res, newRefreshToken);
+    } else {
+      sendrefreshToken(res, refreshToken.token);
+    
+    }
+   
+    return res.status(200).json({ message: "User logged in successfully", accessToken });
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  catch(error){
-    res.status(500).json({ message: "error.message" });
-  }
-}
+};
+
 
 const protectedRoute = async (req: Request, res: Response, next: NextFunction) => {
   try{
     const userId=isAuth(req)
     console.log(userId)
-    if(!userId){
-      return res.status(400).json({message:"user not authenticated and data is protecred"})
+    if(userId !==null){
+    
+      return res.status(400).json({message:"and data is protecred"})
     }
   }
-  catch(error){
-    res.status(500).json({ message: "error.message" });
+  catch(error:any){
+    res.status(500).json({ message: error.message});
   }
 }
 
@@ -91,20 +101,27 @@ const UserLogout = async (req: Request, res: Response) => {
 }
 
 const UserRefreshToken = async (req: Request, res: Response) => {
+  
   const token=req.cookies.refreshtoken;
-  console.log(req.cookies)
+console.log(token)
+  //if no toem in our request
   if(!token){
 return res.status(400).json({accestoken:""})
   }
   let payload:any=null
   try{
     //if toekn verify
+
     payload=verify(token,process.env.REFRESH_TOKEN_SECRET!)
+    console.log(payload)
   }catch(error){
-     return res.status(400).json({accestoken:""})
+    console.log(error)
+     return res.status(300).json({accestoken:""})
   
 }
+}
 //toekn valid
+/*
 const user=await prisma.refreshToken.findUnique({where:{userId:payload.userId}})
 console.log(user)
 if(!user){
@@ -117,8 +134,9 @@ if(!user){
       //toek ensit create new refresh and accesstoekn
       const accesstoekn=createAccessToken(user.userId)
       const refreshtoken=createRefreshToken(user.userId)
+      //new refresh and acess toke
       await prisma.refreshToken.update({where:{userId:user.userId},data:{token:refreshtoken}})
       res.send({accesstoekn})
 }
-
+*/
 export {UserRegister,UserLogin,UserLogout,protectedRoute,UserRefreshToken}
