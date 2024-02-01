@@ -27,5 +27,14 @@ res.cookie('refreshtoken',token,{
 
 
 )}
+const isTokenExpired = (expiresAt: Date) => {
+    return expiresAt <= new Date();
+  };
+  
 
-export { createAccessToken, createRefreshToken,sendrefreshToken,sendaccessToken}
+  const calculateTokenExpiration = () => {
+    const expiration = new Date();
+    expiration.setDate(expiration.getDate() + 7); 
+    return expiration;
+  };
+export { createAccessToken, createRefreshToken,sendrefreshToken,sendaccessToken,isTokenExpired,calculateTokenExpiration}

@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 const { sign, decode, verify } = jsonwebtoken;
 import { PrismaClient } from '@prisma/client';
-import { createAccessToken,createRefreshToken,sendrefreshToken,sendaccessToken } from '../utils/token';
+import { createAccessToken,createRefreshToken,sendrefreshToken,sendaccessToken ,isTokenExpired,calculateTokenExpiration} from '../utils/token';
 import bcrypt from 'bcrypt';
 import isAuth from '../utils/isAuth';
 const prisma = new PrismaClient();
@@ -46,27 +46,34 @@ const UserLogin = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
-    const refreshToken = await prisma.refreshToken.findUnique({ where: { userId: user.id } });
+    let refreshToken = await prisma.refreshToken.findUnique({ where: { userId: user.id } });
+    ///
+    console.log(refreshToken)
     const accessToken = createAccessToken(user.id);
 
-    if (!refreshToken) {
+    if (!refreshToken || isTokenExpired(refreshToken.expiresAt)) {
+     
       const newRefreshToken = createRefreshToken(user.id);
-
-      await prisma.refreshToken.create({
-        data: {
+ //if exist update else create
+      await prisma.refreshToken.upsert({
+        where: { userId: user.id },
+        update: { token: newRefreshToken, expiresAt: calculateTokenExpiration() },
+        create: {
           userId: user.id,
           token: newRefreshToken,
+          expiresAt: calculateTokenExpiration(),
         },
       });
 
+      const refreshToken = { token: newRefreshToken }; 
+      
       sendrefreshToken(res, newRefreshToken);
     } else {
       sendrefreshToken(res, refreshToken.token);
-    
     }
-   
+
     return res.status(200).json({ message: "User logged in successfully", accessToken });
-    
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -76,6 +83,7 @@ const UserLogin = async (req: Request, res: Response) => {
 
 const protectedRoute = async (req: Request, res: Response, next: NextFunction) => {
   try{
+    console.log(req)
     const userId=isAuth(req)
     console.log(userId)
     if(userId !==null){
@@ -91,7 +99,8 @@ const protectedRoute = async (req: Request, res: Response, next: NextFunction) =
 
 const UserLogout = async (req: Request, res: Response) => {
   try{
-    res.clearCookie('refreshtoken',{path:'/refresh_token'})
+
+    res.clearCookie('refreshtoken',{path:'/'})
     return res.status(200).json({message:"user logged out successfully"})
 
   }
@@ -103,7 +112,7 @@ const UserLogout = async (req: Request, res: Response) => {
 const UserRefreshToken = async (req: Request, res: Response) => {
   
   const token=req.cookies.refreshtoken;
-console.log(token)
+console.log("existing is"+token)
   //if no toem in our request
   if(!token){
 return res.status(400).json({accestoken:""})
@@ -113,13 +122,14 @@ return res.status(400).json({accestoken:""})
     //if toekn verify
 
     payload=verify(token,process.env.REFRESH_TOKEN_SECRET!)
-    console.log(payload)
+    return res.status(200).json({payload})
   }catch(error){
     console.log(error)
      return res.status(300).json({accestoken:""})
   
 }
 }
+
 //toekn valid
 /*
 const user=await prisma.refreshToken.findUnique({where:{userId:payload.userId}})
