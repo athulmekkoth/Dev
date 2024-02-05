@@ -1,25 +1,42 @@
 // src/components/LoginPage.tsx
 import React, { useState } from 'react';
-
+import { loginUser } from '../../redux/store/slices/Userslice';
 import { MouseEvent } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { RootState } from '@reduxjs/toolkit/query';
 type Inputs = {
   password: string
   email: string
 }
 
 const LoginPage: React.FC = () => {
-  const dispatch=useDispatch()
+
+  const user=useSelector<RootState, string>((state) => state.user)
+  console.log(user)
+
+
+  const dispatch = useDispatch<any>();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => dispatch(data)
+  const onSubmit: SubmitHandler<Inputs> = async(data) => {
+   
+    try {
+      console.log(data)
+      const resultAction = await dispatch(loginUser(data));
+    console.log(resultAction)
+    } catch (error) {
+      // Handle any errors here
+      console.error('Error logging in:', error);
+    }
+  }
 
-  console.log(watch("password"))
+ 
   
 
   return (

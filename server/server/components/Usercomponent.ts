@@ -33,10 +33,12 @@ const UserRegister = async (req: Request, res: Response) => {
 
 
 const UserLogin = async (req: Request, res: Response) => {
+
   try {
     const user = await prisma.user.findUnique({ where: { email: req.body.email } });
 
     if (!user) {
+      console.log("no user")
       return res.status(400).json({ message: "User does not exist" });
     }
 
