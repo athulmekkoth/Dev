@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import isAuth from '../utils/isAuth';
 const prisma = new PrismaClient();
 const UserRegister = async (req: Request, res: Response) => {
+  console.log(req.body)
   try {
     const {name,email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email: email } });
@@ -38,8 +39,8 @@ const UserLogin = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({ where: { email: req.body.email } });
 
     if (!user) {
-      console.log("no user")
-      return res.status(400).json({ message: "User does not exist" });
+     
+      return res.status(404).json({ message: "User does not exist" });
     }
 
     const password = await bcrypt.compare(req.body.password, user.password);
@@ -74,7 +75,7 @@ const UserLogin = async (req: Request, res: Response) => {
       sendrefreshToken(res, refreshToken.token);
     }
 
-    return res.status(200).json({ message: "User logged in successfully", accessToken });
+    return res.status(200).json({ message: "User logged in successfully", accessToken,user:{id:user.id,name:user.username,isAdmin:user.iadmin} });
 
   } catch (error) {
     console.error(error);

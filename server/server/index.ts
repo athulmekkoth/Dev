@@ -13,12 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(cors({
-  origin: 'http://localhost:5174', 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-}));
+app.use(cors());
 
 app.use("/user", UserRouter);
 
@@ -27,4 +22,5 @@ app.get('/', async (req: Request, res: Response) => {
 })
 
 app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

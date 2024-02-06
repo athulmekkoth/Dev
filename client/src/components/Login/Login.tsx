@@ -1,43 +1,29 @@
-// src/components/LoginPage.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { loginUser } from '../../redux/store/slices/Userslice';
-import { MouseEvent } from 'react';
-import { useForm, SubmitHandler } from "react-hook-form"
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useAppDispatch } from "../../app/hooks";
+import { RootState } from "../../redux/store/store";
+import { useSelector } from "react-redux";
+
 type Inputs = {
-  password: string
-  email: string
-}
+  password: string;
+  email: string;
+};
 
 const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { register, handleSubmit } = useForm<Inputs>();
+  const user = useSelector((state: RootState) => state.user);
 
-  const user=useSelector<RootState, string>((state) => state.user)
-  console.log(user)
-
-
-  const dispatch = useDispatch<any>();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = async(data) => {
-   
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      console.log(data)
-      const resultAction = await dispatch(loginUser(data));
-    console.log(resultAction)
+      console.log(data);
+      const resultAction = await dispatch(loginUser(data)); // Pass data through closure
+      console.log(resultAction);
     } catch (error) {
-      // Handle any errors here
       console.error('Error logging in:', error);
     }
-  }
-
- 
-  
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -53,7 +39,6 @@ const LoginPage: React.FC = () => {
               id="email"
               className="w-full p-2 border rounded"
               placeholder="Enter your email"
-          
               {...register("email")}
               required
             />
@@ -67,7 +52,6 @@ const LoginPage: React.FC = () => {
               id="password"
               className="w-full p-2 border rounded"
               placeholder="Enter your password"
-              
               {...register("password")}
               required
             />
@@ -75,7 +59,6 @@ const LoginPage: React.FC = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-           
           >
             Login
           </button>
