@@ -51,7 +51,9 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action:PayloadAction<User[]>) => {
         state.pending = false;
         console.log(action.payload);
-        state.users=action.payload; 
+        state.users.push(action.payload)
+        console.log(JSON.stringify(state.users));
+      
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.pending= false;

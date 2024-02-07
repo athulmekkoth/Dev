@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../app/hooks";
 import { RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom';
 
 type Inputs = {
   password: string;
@@ -13,18 +14,18 @@ type Inputs = {
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<Inputs>();
-  const user = useSelector((state: RootState) => state.user);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       console.log(data);
       const resultAction = await dispatch(loginUser(data)); // Pass data through closure
-      console.log(resultAction);
     } catch (error) {
       console.error('Error logging in:', error);
     }
   };
 
+ 
+  
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white p-8 rounded shadow-md w-96">
@@ -63,6 +64,7 @@ const LoginPage: React.FC = () => {
             Login
           </button>
         </form>
+       <Link to="/" className="text-blue-500 mt-4 block text-center">Don't have an account? Sign up</Link>
       </div>
     </div>
   );
