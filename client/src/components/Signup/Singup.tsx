@@ -23,7 +23,7 @@ const Singup: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       console.log(data);
-      const resultAction = await dispatch(createUser());
+      const resultAction = await dispatch(createUser(data));
       console.log(resultAction);
     } catch (error) {
       // Handle any errors here
