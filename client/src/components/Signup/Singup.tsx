@@ -1,9 +1,9 @@
-// src/components/LoginPage.tsx
-import React, { useState } from "react";
+
 import { createUser } from "../../redux/store/slices/Userslice";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MouseEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAppSelector,useAppDispatch } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 type Inputs = {
   name: string;
   password: string;
@@ -23,7 +23,7 @@ const Singup: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       console.log(data);
-      const resultAction = await dispatch(createUser());
+      const resultAction = await dispatch(createUser(data));
       console.log(resultAction);
     } catch (error) {
       // Handle any errors here

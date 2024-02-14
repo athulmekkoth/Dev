@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const loginUser = createAsyncThunk("user/login", async (data: { email: string, password: string,}) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, data);
     return res.data;
@@ -12,6 +13,7 @@ export const loginUser = createAsyncThunk("user/login", async (data: { email: st
 
 export const createUser = createAsyncThunk("user/create", async (data: { email: string, password: string, name: string }) => {
   console.log(data);
+  // eslint-disable-next-line no-useless-catch
   try {
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, data);
     return res.data;
