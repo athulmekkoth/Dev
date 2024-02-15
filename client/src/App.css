@@ -1,3 +1,30 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+*{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: #f4f3f9;
+}
+#shine{
+    
+        background: #222 -webkit-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff)) 0 0 no-repeat;
+        -webkit-background-size: 125px;
+    
+        color: rgba(255, 255, 255,.9);
+        -webkit-background-clip: text;
+    
+        -webkit-animation-name: shine;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+    }
+    
+    @keyframes shine {
+        0% {
+            background-position: top left;
+        }
+    
+        100% {
+            background-position: top right;
+        }
+    }

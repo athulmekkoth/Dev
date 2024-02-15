@@ -1,10 +1,20 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
-const Button = ({link:string,name:string}) => {
+type ButtonProps = {
+  link: string;
+  name: string;
+  color:string;
+};
+
+const Button = ({ link, name,color }: ButtonProps) => {
   return (
-  <Link to={link}><button>{name}</button></Link>
-  )
-}
+    <Link to={link}>
+     
+        <button style={{backgroundColor:`${color}`,borderRadius:"60px"}} className=" p-2  rounded-xl  text-white "> {name}</button>
+      
+    </Link>
+  );
+};
 
-export default Button
+export default Button;
