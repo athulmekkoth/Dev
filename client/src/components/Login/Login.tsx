@@ -2,8 +2,7 @@ import React from 'react';
 import { loginUser } from '../../redux/store/slices/Userslice';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../app/hooks";
-import { RootState } from "../../redux/store/store";
-import { useSelector } from "react-redux";
+
 import { Link } from 'react-router-dom';
 
 type Inputs = {
@@ -23,6 +22,7 @@ const LoginPage: React.FC = () => {
       console.error('Error logging in:', error);
     }
   };
+
 
  
   
