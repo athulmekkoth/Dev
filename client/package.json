@@ -12,17 +12,23 @@
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@apollo/server": "^4.9.5",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.10",
     "@reduxjs/toolkit": "^2.1.0",
     "@splinetool/react-spline": "^2.2.6",
     "@types/react-redux": "^7.1.33",
     "axios": "^1.6.7",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.5",
     "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.0",
     "react-query": "^3.39.3",
     "react-redux": "^9.1.0",
-    "react-router-dom": "^6.20.1"
+    "react-router-dom": "^6.20.1",
+    "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
