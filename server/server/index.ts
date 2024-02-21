@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import bodyParser from 'body-parser';
 import UserRouter from './routes/Userroute';
+import redis from './utils/client';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -20,6 +21,7 @@ app.use("/user", UserRouter);
 app.get('/', async (req: Request, res: Response) => {
   res.send("Hello World");
 })
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

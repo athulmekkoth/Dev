@@ -21,6 +21,7 @@ model User {
   HouseOwned House[] @relation("HouseOwner")
 
   HouseBuild House[] @relation("Housebuilder")
+  Ideas Idea [] @relation("createdById")
 }
 model RefreshToken {
   id         String   @id @default(uuid())
@@ -44,3 +45,15 @@ model House {
 }
 // npx prisma migrate dev --name init --create-only
 //npx prisma migrate deploy 
+model Idea {
+  id        String   @id @default(uuid())
+  createdBy User     @relation("createdById",fields: [createdById], references: [id])
+  createdById String
+
+}
+
+model ideas{
+   id        String   @id @default(uuid())
+    content   String
+  createdAt DateTime @default(now())
+}
