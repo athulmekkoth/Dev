@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express';
-import {UserRegister,UserLogin,protectedRoute,UserRefreshToken, UserLogout} from '../components/Usercomponent';
+import {UserRegister,UserLogin,protectedRoute,UserRefreshToken, UserLogout} from '../controllers/Usercontrollers';
 
 const UserRouter = express.Router();
 UserRouter.post('/register', UserRegister);
