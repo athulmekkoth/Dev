@@ -11,18 +11,17 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   username  String   @unique
-  iadmin    Boolean  @default(false)
+  isAdmin    Boolean  @default(false)
   password  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
  refreshToken RefreshToken?
 
-
+  Emails Emails[] @relation("Totalemails")
   HouseOwned House[] @relation("HouseOwner")
 
   HouseBuild House[] @relation("Housebuilder")
-  Ideas Idea [] @relation("createdById")
-  Likes Like [] @relation("user")
+ 
 }
 model RefreshToken {
   id         String   @id @default(uuid())
@@ -46,24 +45,11 @@ model House {
 }
 // npx prisma migrate dev --name init --create-only
 //npx prisma migrate deploy 
-model Idea {
-  id          String   @id @default(uuid())
-
-  createdAt   DateTime @default(now())
-  createdBy   User     @relation("createdById",fields: [createdById], references: [id])
-  createdById String
-  heading     String
- contents    String[] 
- images    String[]
-  likes       Like[]@relation("likedBy")
-
-  
-}
-model Like {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  createdBy User     @relation("user", fields: [createdById], references: [id])
-  createdById String
-  idea      Idea     @relation("likedBy",fields: [ideaId], references: [id])
-  ideaId    String
+model Emails{
+  id String @id @default(uuid())
+  userId  String @unique
+  user User @relation("Totalemails",fields: [userId], references: [id])
+  title String
+  Content String
+createtAt DateTime @default(now())
 }

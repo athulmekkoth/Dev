@@ -1,5 +1,5 @@
 // ProfileContent.js
-import { Card } from "@/components/Ui_elements/ContainerScroll";
+
 import { Input } from "@mui/material";
 import React, { useState } from "react";
 
@@ -67,7 +67,7 @@ const ProfileContent = () => {
               : "hidden"
           }
         >
-         <Card />
+   
           
         </div>
       </div>
