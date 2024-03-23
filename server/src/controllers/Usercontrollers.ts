@@ -15,6 +15,7 @@ const UserRegister = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({ where: { email: email } });
    
     if (user) {
+      
       return res.status(400).json({ message: "User already exists" });
 
     }
@@ -73,10 +74,11 @@ const UserLogin = async (req: Request, res: Response) => {
       });
 
       const refreshToken = { token: newRefreshToken };
-
+console.log(refreshToken)
       sendRefreshToken(res, newRefreshToken);
+    
     } else {
-     
+      console.log(refreshToken.token)
       sendRefreshToken(res, refreshToken.token);
     }
 
@@ -89,16 +91,15 @@ const UserLogin = async (req: Request, res: Response) => {
 };
 
 
-// const protectedRoute = async (req: Request, res: Response, next: NextFunction) => {
+//  const protectedRoute = async (req: Request, res: Response, next: NextFunction) => {
 //   try {
 
 //     c = isAuth(req)
    
-//     if (userId !== null) {
+//      if (userId !== null) {
 
-//       return res.status(400).json({ message: "and data is protecred" })
-//     }
-//   }
+//       return res.status(400).json({ message: "and data is protecred" })    }
+//      }
 //   catch (error: any) {
 //     res.status(500).json({ message: error.message });
 //   }
@@ -130,7 +131,7 @@ const UserRefreshToken = async (req: Request, res: Response) => {
     //if toekn verify
 
     payload = verify(token, process.env.REFRESH_TOKEN_SECRET!)
-console.log("s");
+
 
     return res.status(200).json({ payload })
   } catch (error) {
@@ -159,4 +160,16 @@ if(!user){
       res.send({accesstoekn})
 }
 */
-export { UserRegister, UserLogin, UserLogout, UserRefreshToken }
+const Userdelete=async(req:Request,res:Response)=>{
+try{
+  const id=req.body.id;
+
+  const user=await prisma.user.delete({where:{id:id}})
+  res.status(200).json({message:"user deleted successfully"})
+}
+catch(error:any){
+  res.status(500).json({message:"error.message"})
+}
+}
+
+export { UserRegister, UserLogin, UserLogout, UserRefreshToken,Userdelete }

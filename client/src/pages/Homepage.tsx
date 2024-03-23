@@ -16,8 +16,7 @@ const Homepage = () => {
   
   ];
   const titleComponent = <h1>Your Title Here</h1>; 
-  const user = useSelector((state: RootState) => state.user.users);
-  console.log(user);
+
   return (
     <div>
       <div className="w-100 flex flex-col sm:w-100 md:flex-row  justify-between items-stretch mt-5 pr-3 pl-3">

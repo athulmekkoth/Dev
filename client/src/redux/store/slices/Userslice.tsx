@@ -25,6 +25,7 @@ type User={
   id:number,
   name:string,
   isAdmin:boolean
+  token:string
 }
 type initialState=
 {

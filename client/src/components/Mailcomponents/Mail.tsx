@@ -4,14 +4,24 @@ import { render } from "react-dom";
 import EmailEditor from "react-email-editor";
 import Buttongroup from "../MUI components/Buttongroup";
 import { Button } from "@mui/material";
-
+import { RootState } from "../../redux/store/store";
+import { UseSelector } from "react-redux";
+import { SaveData } from "../../redux/store/slices/DataSlice";
+import { useAppDispatch } from "../../app/hooks";
 const Example = (props) => {
+  const dispatch = useAppDispatch();
+
   const emailEditorRef = useRef(null);
 
-  const exportHtml = () => {
+  const exportHtml = async() => {
     emailEditorRef.current.editor.exportHtml((data) => {
-      const { design, html } = data;
-      console.log("exportHtml", html);
+      const {html } = data;
+     try{
+ dispatch(SaveData({content:html,title:"Mail"}))
+     }
+     catch(error){
+       console.log(error);
+     }
     });
   };
 
