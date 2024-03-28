@@ -30,10 +30,11 @@ app.get('/', async (req: Request, res: Response) => {
 })
 
 app.get('/refresh', (req, res) => {
-  console.log(req.cookies)
-  const refreshToken = req.cookies.refreshToken;
+  console.log('s')
+  console.log(req.cookies.refresh)
+
   
-  console.log(refreshToken);
+
   // Now you can use refreshToken as needed
   // For example, you can send it to your authentication middleware for token verification
 });

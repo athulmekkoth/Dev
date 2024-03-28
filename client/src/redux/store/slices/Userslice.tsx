@@ -29,14 +29,14 @@ type User={
 }
 type initialState=
 {
-  users: User[],
+  users: User|null,
   pending: boolean,
   fulfilled: boolean,
   rejected: boolean
 }
   
 const initialState:initialState = {
-  users: [],
+  users: null,
   pending: false,
   fulfilled: false,
   rejected: false,
