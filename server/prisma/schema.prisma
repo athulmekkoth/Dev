@@ -15,7 +15,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
- refreshToken RefreshToken?
+
 
   Emails Emails[] @relation("Totalemails")
   HouseOwned House[] @relation("HouseOwner")
@@ -23,14 +23,7 @@ model User {
   HouseBuild House[] @relation("Housebuilder")
  
 }
-model RefreshToken {
-  id         String   @id @default(uuid())
-  userId     String @unique
-  token      String   @unique
-   expiresAt  DateTime @default(dbgenerated("NOW() + interval '7 days'"))
-  createdAt  DateTime @default(now())
-  user User @relation(fields: [userId], references: [id])
-}
+
 
 model House {
   id           String   @id @default(uuid())
@@ -47,9 +40,9 @@ model House {
 //npx prisma migrate deploy 
 model Emails{
   id String @id @default(uuid())
-  userId  String @unique
+  userId  String 
   user User @relation("Totalemails",fields: [userId], references: [id])
-  title String
+  title String @unique
   Content String
 createtAt DateTime @default(now())
 }

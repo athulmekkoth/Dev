@@ -1,14 +1,21 @@
 
-import React, { useRef } from "react";
+import React, { useRef,useEffect,useState } from "react";
 import { render } from "react-dom";
 import EmailEditor from "react-email-editor";
 import Buttongroup from "../MUI components/Buttongroup";
 import { Button } from "@mui/material";
 import { RootState } from "../../redux/store/store";
 import { UseSelector } from "react-redux";
-import { SaveData } from "../../redux/store/slices/DataSlice";
+
+import { saveData } from "../../redux/store/slices/DataSlice";
 import { useAppDispatch } from "../../app/hooks";
 const Example = (props) => {
+  const[name,setName]=useState('');
+  useEffect(() => {
+    const url = new URL("http://localhost:5173/mail?name=ww");
+    const nameValue = url.searchParams.get('name');
+   setName(nameValue);
+  },    []);
   const dispatch = useAppDispatch();
 
   const emailEditorRef = useRef(null);
@@ -17,7 +24,7 @@ const Example = (props) => {
     emailEditorRef.current.editor.exportHtml((data) => {
       const {html } = data;
      try{
- dispatch(SaveData({content:html,title:"Mail"}))
+ dispatch(saveData({content:html,title:name}))
      }
      catch(error){
        console.log(error);

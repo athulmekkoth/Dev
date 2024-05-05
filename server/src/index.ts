@@ -21,7 +21,6 @@ app.use(cors({
 }));
 
 
-
 app.use("/user", UserRouter);
 app.use("/content", contentrouter);
 
@@ -29,15 +28,8 @@ app.get('/', async (req: Request, res: Response) => {
   res.send("Hello World");
 })
 
-app.get('/refresh', (req, res) => {
-  console.log('s')
-  console.log(req.cookies.refresh)
 
-  
 
-  // Now you can use refreshToken as needed
-  // For example, you can send it to your authentication middleware for token verification
-});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

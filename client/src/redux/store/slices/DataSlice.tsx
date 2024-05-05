@@ -3,19 +3,31 @@ import axios from "axios";
 
 export const saveData = createAsyncThunk('mail/save', async (data: { content: string, title: string }, { rejectWithValue }) => {
     try {
-
-const accessToken =
-        const result = await axios.post(`${import.meta.env.VITE_BASE_URL}/save`, data, {
-            withCredentials: true,
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-
-        // Return the result if successful
+        console.log(data)
+        const result = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/content/create`,
+            data,
+            { withCredentials: true }
+          );
+          
         return result.data;
-    } catch (error) {
-        // Return the rejected value with error if request fails
+    } catch (error:any) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+
+export const getData = createAsyncThunk('mail/getall', async () => {
+    try {
+        console.log(data)
+        const result = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/content/create`,
+            data,
+            { withCredentials: true }
+          );
+          
+        return result.data;
+    } catch (error:any) {
         return rejectWithValue(error.response.data);
     }
 });

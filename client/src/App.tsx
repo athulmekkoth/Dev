@@ -10,6 +10,7 @@ import Example from "./components/Mailcomponents/Mail.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import BasicTabs from "./pages/BasicTabs.tsx";
 import ProfileContent from "./pages/Profile.tsx";
+import Newsletter from "./components/Newletter/Newsletter.tsx";
 import CreatePage from "./pages/CreatePage.tsx";
 function App() {
   return (
@@ -22,7 +23,9 @@ function App() {
           <Route path="/signup" element={<Singup />} />
           <Route path="/profile" element={<ProfileContent />} />
           <Route path="/dashboard" element={<CreatePage />} />
+          <Route path="/sample" element={<Newsletter />} />
           <Route path="/mail/*" element={<Example />} />
+          
         </Routes>
       </div>
       <div id="Footer">

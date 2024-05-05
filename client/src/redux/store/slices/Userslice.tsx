@@ -4,7 +4,7 @@ import axios from "axios";
 export const loginUser = createAsyncThunk("user/login", async (data: { email: string, password: string,}) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, data);
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, data, { withCredentials: true });
     return res.data;
   } catch (error) {
     throw error;
@@ -21,22 +21,22 @@ export const createUser = createAsyncThunk("user/create", async (data: { email: 
     throw error;
   }
 });
-type User={
-  id:number,
+type user={
+  id:string,
   name:string,
   isAdmin:boolean
   token:string
 }
 type initialState=
 {
-  users: User|null,
+  user: user|null,
   pending: boolean,
   fulfilled: boolean,
   rejected: boolean
 }
   
 const initialState:initialState = {
-  users: null,
+  user: null,
   pending: false,
   fulfilled: false,
   rejected: false,
@@ -51,11 +51,10 @@ const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.pending = true;
       })
-      .addCase(loginUser.fulfilled, (state, action:PayloadAction<User[]>) => {
+      .addCase(loginUser.fulfilled, (state, action:PayloadAction<user>) => {
         state.pending = false;
-        console.log(action.payload);
-        state.users.push(action.payload)
-        console.log(JSON.stringify(state.users));
+        state.user = action.payload.user;
+        console.log(JSON.stringify(state.user));
       
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -67,7 +66,7 @@ const userSlice = createSlice({
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.pending = false;
-        state.users.push(action.payload);
+        state.users=[...action.payload];
       })
       .addCase(createUser.rejected, (state, action) => {
         state.pending= false;

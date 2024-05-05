@@ -12,6 +12,8 @@ import { BsLightningChargeFill } from "react-icons/bs";
 import Setting from "./Setting";
 import Dashboard from "./Write";
 import Write from "./Write";
+import Newsletter from "../components/Newletter/Newsletter.tsx";
+import { UrlCompoent } from "../components/Newletter/UrlCompoent.tsx";
 const CreatePage = () => {
   const [index, setIndex] = useState<number>(0);
   const setvalue = (index: number) => {
@@ -25,6 +27,13 @@ const CreatePage = () => {
     if (index === 2) {
       return <Write />;
     }
+    if (index === 5) {
+      return <div>
+        <Newsletter />
+      <UrlCompoent />
+      </div>
+    }
+
     return undefined;
   };
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -32,7 +41,7 @@ const CreatePage = () => {
     setWidth(window.innerWidth);
   }
 
-  console.log(width);
+ 
   {
     width <= 769
       ? alert("you are watcjhing small size viewd best in mobile")
