@@ -43,16 +43,15 @@ const SES_CONFIG = {
 };
 
 const SENDER_EMAIL = process.env.SENDER_EMAIL;
-console.log(process.env.AWS_SECRET_ACCESS_KEY);
 
 if (!SENDER_EMAIL) {
     console.error("SENDER_EMAIL environment variable is not set.");
     process.exit(1); 
 }
-
+console.log(SES_CONFIG)
 const AWS_SES = new AWS.SES(SES_CONFIG);
-console.log(SENDER_EMAIL)
-const sendMail = async (to: string, subject: string, body: string) => {
+
+const sendMail = async (to:string, subject:string, body:string) => {
     let params = {
         Source: SENDER_EMAIL,
         Destination: {
@@ -81,7 +80,7 @@ const sendMail = async (to: string, subject: string, body: string) => {
         let data = await AWS_SES.sendEmail(params).promise();
         console.log(data);
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
     }
 };
 
