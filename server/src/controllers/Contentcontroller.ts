@@ -5,6 +5,7 @@ import redis from '../utils/client';
 const prisma = new PrismaClient();
 
 export const createMail = async (req: Request, res: Response, next: NextFunction) => {
+
   try {
    
     const result = await prisma.emails.create({
@@ -15,22 +16,23 @@ export const createMail = async (req: Request, res: Response, next: NextFunction
       }
     })
    
-    redis.hmset(result.id, {
-      userId: result.userId,
-      title: result.title,
-      Content: result.Content
-    });
+    // redis.hmset(result.id, {
+    //   userId: result.userId,
+    //   title: result.title,
+    //   Content: result.Content
+    // });
+ 
     res.status(200).json({ message: "mail saved" });
-    redis.hmget(result.id, 'userId', 'title', 'Content', (err, obj) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(obj);
-    })
+    // redis.hmget(result.id, 'userId', 'title', 'Content', (err, obj) => {
+    //   if (err) {
+    //     console.error(err);
+    //     return;
+    //   }
+    //   console.log(obj);
+    // })
   }
   catch (error: any) {
-    console.log(error.message);
+    console.log("errro happend:",error.message);
   }
 }
 export const getMail = async (req: Request, res: Response, next: NextFunction) => {

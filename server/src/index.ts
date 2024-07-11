@@ -1,87 +1,48 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from "@prisma/client";
 import bodyParser from 'body-parser';
 import UserRouter from './routes/Userroute';
-import contentrouter from './routes/Contentrouter';
+import ContentRouter from './routes/Contentrouter';
 import redis from './utils/client';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
+import { EmailLogger } from '../logger/EmailLogger';
+import emailRouter from './routes/EmailRoute';
 
-// const app: Express = express();
-// const port = 3000;
-// const prisma = new PrismaClient();
+const app: Express = express();
+const port = 3000;
+const prisma = new PrismaClient();
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(cookieParser());
-// app.use(cors({
-//   credentials: true,
-//   origin: 'http://localhost:5173'
-  
-// }));
+const logger = process.env.NODE_ENV !== 'production' ? EmailLogger() : null;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:5173'
+}));
+
+app.use("/user", UserRouter);
+app.use("/content", ContentRouter);
+app.use("/email", emailRouter);
+app.get('/', async (req: Request, res: Response) => {
+  res.send("Hello World");
+});
 
 
-// app.use("/user", UserRouter);
-// app.use("/content", contentrouter);
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (logger) {
+    logger.error(`Error: ${err.message}`);
+  } else {
+    console.error(`Error: ${err.message}`);
+  }
+  res.status(500).send('Something broke!');
+});
 
-// app.get('/', async (req: Request, res: Response) => {
-//   res.send("Hello World");
-// })
+app.listen(port, async() => {
+ console.log(`port is sucessfully running ${port}`)
 
-
-
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
-import AWS from 'aws-sdk';
-
-const SES_CONFIG = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-};
-
-const SENDER_EMAIL = process.env.SENDER_EMAIL;
-
-if (!SENDER_EMAIL) {
-    console.error("SENDER_EMAIL environment variable is not set.");
-    process.exit(1); 
-}
-console.log(SES_CONFIG)
-const AWS_SES = new AWS.SES(SES_CONFIG);
-
-const sendMail = async (to:string, subject:string, body:string) => {
-    let params = {
-        Source: SENDER_EMAIL,
-        Destination: {
-            ToAddresses: [to],
-        },
-        ReplyToAddresses: [],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: "UTF-8",
-                    Data: '<h1>HTML</h1>'
-                },
-                Text: {
-                    Charset: "UTF-8",
-                    Data: body
-                }
-            },
-            Subject: {
-                Charset: "UTF-8",
-                Data: subject
-            }
-        }
-    };
-
-    try {
-        let data = await AWS_SES.sendEmail(params).promise();
-        console.log(data);
-    } catch (err) {
-        console.error(err.message);
-    }
-};
-
-sendMail('athulmekkoth22@gmail.com', 'hau', "sss");
+});

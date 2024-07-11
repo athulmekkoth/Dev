@@ -15,14 +15,31 @@
 
 // }
 // sendMail('athulmekkoth22@gmail.com','hau',"sss")
+
+import amqplib from "amqplib"
 import AWS from 'aws-sdk';
 import { Request, Response, NextFunction } from 'express';
-
+//rabbitmq_publisher
 interface Email {
     to: string;
     subject: string;
     body: string;
 }
+const PublishMessage=async(req: Request, res: Response, next: NextFunction)=>{
+    try {
+        const connection = await amqplib.connect('amqp://localhost');
+        const channel = await connection.createChannel();
+        await channel.assertQueue('email-queue');
+        console.log('Connected to RabbitMQ successfully.');
+      } catch (err) {
+        console.error('Error connecting to RabbitMQ:', err);
+      }
+}
+
+
+//consumer
+
+
 
 const SES_CONFIG = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
