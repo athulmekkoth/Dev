@@ -1,79 +1,16 @@
-// import AWS from 'aws-sdk';
+import express, { Express, NextFunction, Request, Response } from 'express';
+import publishMessage from '../rabbitMQ/producer';
 
-// const SES_CONFIG={
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//     region: process.env.AWS_REGION
-// }
-// const AWS_SES=new AWS.SES(SES_CONFIG);
-// const sendMail = async (to: string, subject: string, body: string) => {
-//     let params = {
-        
-//     }
-
-
-
-// }
-// sendMail('athulmekkoth22@gmail.com','hau',"sss")
-import AWS from 'aws-sdk';
-import { Request, Response, NextFunction } from 'express';
-
-interface Email {
-    to: string;
-    subject: string;
-    body: string;
-}
-
-const SES_CONFIG = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-};
-
-const SENDER_EMAIL = process.env.SENDER_EMAIL;
-
-if (!SENDER_EMAIL) {
-    console.error("SENDER_EMAIL environment variable is not set.");
-    process.exit(1); 
-}
-
-const AWS_SES = new AWS.SES(SES_CONFIG);
-
-const sendMail = async (req: Request, res: Response, next: NextFunction) => {
-    const { to, subject, body }: Email = req.body;
-
-    const params = {
-        Source: SENDER_EMAIL,
-        Destination: {
-            ToAddresses: [to],
-        },
-        ReplyToAddresses: [],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: "UTF-8",
-                    Data: body, 
-                },
-                Text: {
-                    Charset: "UTF-8",
-                    Data: body 
-                }
-            },
-            Subject: {
-                Charset: "UTF-8",
-                Data: subject
-            }
-        }
-    };
-
-    try {
-        const data = await AWS_SES.sendEmail(params).promise();
-        console.log(data);
-        res.status(200).json({ message: 'Email sent successfully', data });
-    } catch (err: any) {
-        console.error(err.message);
-        res.status(500).json({ message: 'Failed to send email', error: err.message });
+const sendMail=async(req:Request,res:Response,next:NextFunction)=>{
+    const data=req.body
+   
+    if(data)
+    {
+        publishMessage(data)
+        res.status(200).json({message:"successfully send mai;"})
     }
-};
 
-export default sendMail;
+
+}
+
+export default sendMail

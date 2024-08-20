@@ -14,7 +14,7 @@ const app: Express = express();
 const port = 3000;
 const prisma = new PrismaClient();
 
-const logger = process.env.NODE_ENV !== 'production' ? EmailLogger() : null;
+// const logger = process.env.NODE_ENV !== 'production' ? EmailLogger() : null;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,15 +32,15 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 
-// Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (logger) {
-    logger.error(`Error: ${err.message}`);
-  } else {
-    console.error(`Error: ${err.message}`);
-  }
-  res.status(500).send('Something broke!');
-});
+// // Error handling middleware
+// app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+//   if (logger) {
+//     logger.error(`Error: ${err.message}`);
+//   } else {
+//     console.error(`Error: ${err.message}`);
+//   }
+//   res.status(500).send('Something broke!');
+// });
 
 app.listen(port, async() => {
  console.log(`port is sucessfully running ${port}`)

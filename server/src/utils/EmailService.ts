@@ -10,13 +10,20 @@ const SENDER_EMAIL = process.env.SENDER_EMAIL;
 
 if (!SENDER_EMAIL) {
     console.error("SENDER_EMAIL environment variable is not set.");
-    process.exit(1); 
+    process.exit(1);
 }
-console.log(SES_CONFIG)
+
 const AWS_SES = new AWS.SES(SES_CONFIG);
 
-const sendMail = async (to:string, subject:string, body:string) => {
-    let params = {
+interface Email {
+    to: string;
+    subject: string;
+    body: string;
+}
+
+const sendMails = async ({to, subject, body }: Email) => {
+    console.log("hai")
+    const params = {
         Source: SENDER_EMAIL,
         Destination: {
             ToAddresses: [to],
@@ -26,26 +33,27 @@ const sendMail = async (to:string, subject:string, body:string) => {
             Body: {
                 Html: {
                     Charset: "UTF-8",
-                    Data: '<h1>HTML</h1>'
+                    Data: body,
                 },
                 Text: {
                     Charset: "UTF-8",
-                    Data: body
+                    Data: body,
                 }
             },
             Subject: {
                 Charset: "UTF-8",
-                Data: subject
+                Data: subject,
             }
         }
     };
 
     try {
-        let data = await AWS_SES.sendEmail(params).promise();
-        console.log(data);
-    } catch (err) {
-        console.error(err.message);
+        const data = await AWS_SES.sendEmail(params).promise();
+        console.log('Email sent successfully:', data);
+    } catch (err: any) {
+        console.error('Failed to send email:', err.message);
+        throw new Error(err.message); // Rethrow to handle the error in the consumer
     }
 };
 
-sendMail('athulmekkoth22@gmail.com', 'hau', "sss");
+export default sendMails;
