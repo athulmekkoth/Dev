@@ -37,6 +37,7 @@ import sendMails from '../utils/EmailService';
 const queue = 'Email-Queue';
 const connectionString = process.env.AMQP_CONNECTION_STRING as string;
 
+export default async function startConsumer() {
 const open: Promise<Connection> = amqplib.connect(connectionString);
 console.log("hai")
 open
@@ -50,7 +51,7 @@ open
             const data = JSON.parse(msg.content.toString());
             console.log(` [x] Received: ${JSON.stringify(data)}`);
             
-            // Send email via AWS SES
+            // Send email via AWS Email-Queue
             await sendMails(data);
             channel.ack(msg); // Acknowledge the message after successful processing
             console.log(' [x] Message processed and acknowledged');
@@ -70,4 +71,4 @@ open
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
-
+}

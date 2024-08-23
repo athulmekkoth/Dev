@@ -18,11 +18,11 @@ declare global {
 const isAuth = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 
   const tokenCookie = req.cookies?.token;
-
+console.log(tokenCookie)
   req.user = null;
 
   if (!tokenCookie) {
-    return next();
+    return res.status(500).json({ message: "Login before " });
   }
 
   try {

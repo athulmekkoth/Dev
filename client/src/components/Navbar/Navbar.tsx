@@ -1,15 +1,25 @@
-import React from 'react'
-import Button from '../Buttons/Button'
-export const Navbar = () => {
-  return (
-    <nav>
-<div className='bg-red-500 p-3'>
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-</div>
-        <div className='flex  justify-end gap-4 mr-4 mt-4'>
-            <Button link='/' name='Home' color='red' />
-            <Button link='/' name='Home' color='grey' />
-        </div>
+export const Navbar = () => {
+
+  const data = [
+    { name: "Features", link: "/features" },
+    { name: "Pricing", link: "/pricing" },
+    { name: "About", link: "/about" }
+  ];
+
+  return (
+    <nav className="flex flex-row justify-between ">
+     <div>SuperIdeas</div>
+
+     <div>
+     {data && data.map((item, index) => (
+        <span key={index}><Link to={item.link}>{item.name}</Link></span>
+      ))}
+     </div>
+
+      <div>Login</div>
     </nav>
-  )
-}
+  );
+};

@@ -5,6 +5,6 @@ import { restrictedTo,isAuth } from "../utils/isAuth";
 const contentrouter=Router();
 
    
-contentrouter.post('/create',isAuth,createMail);  
+contentrouter.post('/create',restrictedTo,createMail);  
 contentrouter.get('/getall',isAuth,getMail)
 export default contentrouter;

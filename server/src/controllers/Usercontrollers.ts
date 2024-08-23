@@ -43,7 +43,7 @@ const UserLogin = async (req: Request, res: Response) => {
 
     if (!user) {
 
-      return res.status(404).json({ message: "User does not exist" });
+      return res.status(204).json({ message: "User does not exist" });
     }
 
     const password = await bcrypt.compare(req.body.password, user.password);
@@ -79,7 +79,7 @@ console.log(error);
 const UserLogout = async (req: Request, res: Response) => {
   try {
 
-    res.clearCookie('refreshtoken', { path: '/' })
+    res.clearCookie('token', { path: '/' })
     return res.status(200).json({ message: "user logged out successfully" })
 
   }
