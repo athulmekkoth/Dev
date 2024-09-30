@@ -10,7 +10,7 @@ type Inputs = {
   email: string;
 };
 
-const Singup: React.FC = () => {
+const Signup: React.FC = () => {
  
 
   const dispatch = useAppDispatch();
@@ -101,4 +101,4 @@ const Singup: React.FC = () => {
   );
 };
 
-export default Singup;
+export default Signup;

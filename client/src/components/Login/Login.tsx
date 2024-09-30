@@ -12,6 +12,10 @@ type Inputs = {
 };
 
 const LoginPage: React.FC = () => {
+
+
+
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user.user);
@@ -31,6 +35,9 @@ const LoginPage: React.FC = () => {
       const resultAction = await dispatch(loginUser(data));
       if (loginUser.rejected.match(resultAction)) {
         console.error("Login failed:", resultAction.error.message);
+      }
+      else{
+        navigate("/")
       }
     } catch (error) {
       console.error("Error logging in:", error);
