@@ -11,7 +11,7 @@ const Videodiv = () => {
 </div>
 
       <div className=""> 
-        <video autoPlay muted loop playsInline className="s23-app-video">
+        <video  autoPlay muted loop playsInline className="s23-app-video">
           <source
             src="https://res.cloudinary.com/superlist/video/upload/f_auto/v1701114790/website/2023/video/Website_runthrough_existing_list_niqpzo.webm"
             type="video/webm"

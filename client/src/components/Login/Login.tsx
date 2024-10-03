@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { loginUser } from  "../../redux/store/slices/Userslice"
+import { loginUser } from "../../redux/store/slices/Userslice";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../app/hooks";
 import { useSelector } from "react-redux";
@@ -12,10 +12,6 @@ type Inputs = {
 };
 
 const LoginPage: React.FC = () => {
-
-
-
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user.user);
@@ -35,9 +31,8 @@ const LoginPage: React.FC = () => {
       const resultAction = await dispatch(loginUser(data));
       if (loginUser.rejected.match(resultAction)) {
         console.error("Login failed:", resultAction.error.message);
-      }
-      else{
-        navigate("/")
+      } else {
+        navigate("/");
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -88,7 +83,9 @@ const LoginPage: React.FC = () => {
           >
             {pending ? "Logging in..." : "Login"}
           </button>
-          {rejected && <p className="text-red-500 mt-2">Login failed. Please try again.</p>}
+          {rejected && (
+            <p className="text-red-500 mt-2">Login failed. Please try again.</p>
+          )}
         </form>
         <Link to="/signup" className="text-blue-500 mt-4 block text-center">
           Don't have an account? Sign up

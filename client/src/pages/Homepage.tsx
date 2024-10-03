@@ -1,7 +1,6 @@
 import React from "react";
 import { RootState } from "../redux/store/store";
 import { useSelector } from "react-redux";
-import { Navbar } from "../components/Navbar/Navbar";
 import {  Card, ContainerScroll } from "../components/Ui_elements/ContainerScroll";
 import Homecard from "../components/CardHome/Homecard.tsx";
 import Videodiv from "../components/VideoDiv/Videodiv.tsx";
@@ -33,7 +32,7 @@ const Homepage = () => {
     <Homecard />
     <Homecard />
    </div>
-   <Videodiv />
+   {/* <Videodiv /> */}
 
     </div>
    
