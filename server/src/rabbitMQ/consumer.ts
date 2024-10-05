@@ -44,7 +44,7 @@ open
   .then((connection: Connection) => connection.createChannel())
   .then((channel: Channel) => {
     return channel.assertQueue(queue).then(() => {
-      console.log(`[*] Waiting for messages in ${queue}. To exit press CTRL+C`);
+      // console.log(`[*] Waiting for messages in ${queue}. To exit press CTRL+C`);
       channel.consume(queue, async (msg) => {
         if (msg !== null) {
           try {

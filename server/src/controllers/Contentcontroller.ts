@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-import redis from '../utils/client';
+
 const prisma = new PrismaClient();
 
 export const createMail = async (req: Request, res: Response, next: NextFunction) => {

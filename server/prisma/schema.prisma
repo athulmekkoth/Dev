@@ -46,3 +46,8 @@ model Emails{
   Content String
 createtAt DateTime @default(now())
 }
+
+model Analystics{
+ 
+if String @id 
+}
