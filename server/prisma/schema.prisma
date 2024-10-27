@@ -11,19 +11,16 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   username  String   @unique
-  isAdmin    Boolean  @default(false)
+  role      String   @default("User")
   password  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 
-
-  Emails Emails[] @relation("Totalemails")
-  HouseOwned House[] @relation("HouseOwner")
+  Emails     Emails[] @relation("Totalemails")
+  HouseOwned House[]  @relation("HouseOwner")
 
   HouseBuild House[] @relation("Housebuilder")
- 
 }
-
 
 model House {
   id           String   @id @default(uuid())
@@ -36,18 +33,22 @@ model House {
   createdAt    DateTime @default(now())
   updateAt     DateTime @updatedAt
 }
+
 // npx prisma migrate dev --name init --create-only
 //npx prisma migrate deploy 
-model Emails{
-  id String @id @default(uuid())
-  userId  String 
-  user User @relation("Totalemails",fields: [userId], references: [id])
-  title String @unique
-  Content String
-createtAt DateTime @default(now())
+model Emails {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("Totalemails", fields: [userId], references: [id])
+  title     String
+  Content   String
+  createtAt DateTime @default(now())
 }
 
-model Analystics{
- 
-if String @id 
+model logSchema {
+  logID      String   @id
+  logMessage String
+  logObject  Json
+  type       String
+  createdAt  DateTime @default(now())
 }

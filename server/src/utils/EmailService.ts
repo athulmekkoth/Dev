@@ -1,4 +1,6 @@
 import AWS from 'aws-sdk';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const SES_CONFIG = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -52,7 +54,7 @@ const sendMails = async ({to, subject, body }: Email) => {
         console.log('Email sent successfully:', data);
     } catch (err: any) {
         console.error('Failed to send email:', err.message);
-        throw new Error(err.message); // Rethrow to handle the error in the consumer
+        throw new Error(err.message);
     }
 };
 

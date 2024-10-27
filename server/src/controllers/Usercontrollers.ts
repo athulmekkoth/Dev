@@ -4,6 +4,8 @@ const { sign, decode, verify } = jsonwebtoken;
 import { PrismaClient } from '@prisma/client';
 import { createToken } from '../utils/token';
 import bcrypt from 'bcrypt';
+import { logMsg } from '../lib/logProducer';
+import { logID } from '../middleware/LogggerId';
 
 const prisma = new PrismaClient();
 
@@ -27,7 +29,8 @@ const UserRegister = async (req: Request, res: Response) => {
         password: hashedpass
       }
     })
-
+    const logID = req.logId;
+    logMsg(logID as string, "userCreatedSuccessfully", { name:newuser.username, email:newuser.email,role:newuser.role });
     return res.status(200).json({ message: "User created successfully" });
   }
   catch (error: any) {
@@ -35,11 +38,11 @@ const UserRegister = async (req: Request, res: Response) => {
   }
 }
 
-
 const UserLogin = async (req: Request, res: Response) => {
 
   try {
     const user = await prisma.user.findUnique({ where: { email: req.body.email } });
+    
 
     if (!user) {
 
@@ -52,27 +55,23 @@ const UserLogin = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
-
-
-    const Token = createToken(user.id, user.isAdmin);
-    console.log(Token); // Verify the token before setting the cookie
+    const Token = createToken(user.id,user.role);
+//  Verify the token before setting the cookie
     res.cookie("token", Token, {
       httpOnly: true
     });
 
-    // Log the cookies received in the request
-    console.log(req.cookies.token+"cooe");
-    
-    // Check if the token is successfully set as a cookie
-
-    return res.status(200).json({ message: "User logged in successfully", user: { id: user.id, name: user.username, isAdmin: user.isAdmin,token:Token} });
+    const logID = req.logId;
+    logMsg(logID as string, "userloginsuccess", { name:user.username, email:user.email,role:user.role });
+    return res.status(200).json({ message: "User logged in successfully", user: { id: user.id, name: user.username, role:user.role,token:Token} });
 
   } catch (error) {
-console.log(error);
+    const logID = req.logId;
+    logMsg(logID as string, "userloginFailed", {  });
     return res.status(500).json({ message: "Internal Server Error" });
+
   }
 };
-
 
 
 

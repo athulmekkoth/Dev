@@ -9,15 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { channel, connectRabbitMQ } from "../config/rabbitMq";
 import { LOG_QUEUE } from "../Constants";
-import startConsumer from "../rabbitMQ/consumer";
 export const startLogConsumer = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield connectRabbitMQ();
-    channel.consume(LOG_QUEUE, (msg) => __awaiter(void 0, void 0, void 0, function* () {
-        if (msg !== null) {
-            const logData = JSON.parse(msg.content.toString());
-            console.log(logData);
-            channel.ack(msg);
+    try {
+        yield connectRabbitMQ();
+        if (!channel) {
+            throw new Error("Channel is not initialized");
         }
-    }));
+        channel.consume(LOG_QUEUE, (msg) => __awaiter(void 0, void 0, void 0, function* () {
+            if (msg !== null) {
+                const logData = JSON.parse(msg.content.toString());
+                console.log("Received log:", logData);
+                channel.ack(msg);
+            }
+            else {
+                console.log("Received null message");
+            }
+        }), { noAck: false }); //remove auto if msg delivers
+    }
+    catch (err) {
+        console.error("Failed to start log consumer:", err);
+    }
 });
-startConsumer().catch(err => console.log("failed to consume"));
+startLogConsumer();

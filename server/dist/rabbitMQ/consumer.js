@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import amqplib from 'amqplib';
+import * as amqplib from 'amqplib';
 // dotenv.config();
 // const open = require("amqplib").connect(process.env.AMQP_CONNECTION_STRING)
 // const queue = 'email-task';

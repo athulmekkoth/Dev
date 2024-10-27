@@ -6,15 +6,21 @@ const prisma = new PrismaClient();
 
 export const createMail = async (req: Request, res: Response, next: NextFunction) => {
 
+const user =req.user?.id ?? '';
+
   try {
+ 
+    const { title, content,userId } = req.body
+   const result = await prisma.emails.create({
+    data: {
+      user: {
+        connect: { id: user },  
+      },
+      title: title,
+      Content:content
    
-    const result = await prisma.emails.create({
-      data: {
-        userId: req.user?.userId,
-        title: req.body.title,
-        Content: req.body.content
-      }
-    })
+    }
+  });
    
     // redis.hmset(result.id, {
     //   userId: result.userId,

@@ -1,13 +1,13 @@
-import amqp, { Channel } from "amqplib";
+import { Channel, connect } from "amqplib"; 
 import { LOG_QUEUE, EMAIL_QUEUE } from "../Constants";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; 
 
-let channel: Channel;  // Declare channel globally
+let channel: Channel; 
 
 const connectRabbitMQ = async () => {
   try {
-    const connection = await amqp.connect(process.env.RABBITMQ_URI!);
-    channel = await connection.createChannel();  // Assign channel
+    const connection = await connect(process.env.RABBITMQ_URI!); 
+    channel = await connection.createChannel(); 
     await channel.assertQueue(LOG_QUEUE);
     await channel.assertQueue(EMAIL_QUEUE);
     console.log("Connected to RabbitMQ");
@@ -18,4 +18,4 @@ const connectRabbitMQ = async () => {
   }
 };
 
-export { connectRabbitMQ, channel };  // Export channel and connectRabbitMQ
+export { connectRabbitMQ, channel };

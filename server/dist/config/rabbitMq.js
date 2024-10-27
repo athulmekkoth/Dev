@@ -7,13 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import amqp from "amqplib";
+import { connect } from "amqplib"; // Only named imports
 import { LOG_QUEUE, EMAIL_QUEUE } from "../Constants";
-let channel; // Declare channel globally
+let channel;
 const connectRabbitMQ = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const connection = yield amqp.connect(process.env.RABBITMQ_URI);
-        channel = yield connection.createChannel(); // Assign channel
+        const connection = yield connect(process.env.RABBITMQ_URI); // Use the named import
+        channel = yield connection.createChannel();
         yield channel.assertQueue(LOG_QUEUE);
         yield channel.assertQueue(EMAIL_QUEUE);
         console.log("Connected to RabbitMQ");
@@ -23,4 +23,4 @@ const connectRabbitMQ = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("Error connecting to RabbitMQ:", err);
     }
 });
-export { connectRabbitMQ, channel }; // Export channel and connectRabbitMQ
+export { connectRabbitMQ, channel };
