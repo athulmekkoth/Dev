@@ -13,6 +13,7 @@ const prisma = new PrismaClient();
 const UserRegister = async (req: Request, res: Response) => {
 
   try {
+    console.log(req.body)
     const { name, email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email: email } });
 
@@ -42,7 +43,7 @@ const UserLogin = async (req: Request, res: Response) => {
 
   try {
     const user = await prisma.user.findUnique({ where: { email: req.body.email } });
-    
+    console.log(user)
 
     if (!user) {
 

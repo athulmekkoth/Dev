@@ -1,11 +1,12 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-
+import  {validationResult} from 'express-validator'
 const prisma = new PrismaClient();
 
 export const createMail = async (req: Request, res: Response, next: NextFunction) => {
-
+const errros = validationResult(req)
+console.log(errros)
 const user =req.user?.id ?? '';
 
   try {

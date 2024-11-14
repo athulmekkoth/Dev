@@ -1,13 +1,27 @@
-import { createMail,getMail} from "../controllers/Contentcontroller";
+import { createMail, getMail } from "../controllers/Contentcontroller";
 import { Router } from "express";
-
-import {isAuth } from "../utils/isAuth";
+import { isAuth } from "../utils/isAuth";
 import { authMidleWare } from "../middleware/authMiddleWare";
 import { checkPermission } from "../middleware/roleMiddleWare";
 import { rateLimiter } from "../middleware/rateLimiter";
-const contentrouter=Router();
+import { body } from 'express-validator';
+import { handelValidationError } from "../middleware/ErrorMiddleWare";
+const contentRouter = Router();
 
-   
-contentrouter.post('/create',authMidleWare,rateLimiter,checkPermission("create"),createMail);  
-contentrouter.get('/getall',isAuth,getMail)
-export default contentrouter;
+
+const validateMail=[
+    body('title').isLength({ min: 5 }).withMessage('Title is required and minimmum 5 characters'),
+]
+
+contentRouter.post(
+  '/create',
+ validateMail,
+  handelValidationError,authMidleWare,
+  rateLimiter,
+  checkPermission("create"),
+  createMail
+);
+
+contentRouter.get('/getall', isAuth, getMail);
+
+export default contentRouter;
